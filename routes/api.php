@@ -4,6 +4,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\Merchant\MerchantItemController;
 use App\Http\Controllers\OrderController;
+use App\Http\Middleware\HandleApiErrors;
 use Illuminate\Support\Facades\Route;
 
 
@@ -18,6 +19,8 @@ Route::post('/api/orders/{order}/cancel', [OrderController::class, 'cancel'])->m
 Route::middleware(['auth', 'role:merchant'])->group(function () {
     Route::get('/api/merchant/orders', [OrderController::class, 'merchantOrders']);
     Route::post('/api/merchant/orders/{order}/status', [OrderController::class, 'updateStatus']);
+    Route::post('api/merchant/items', [MerchantItemController::class, 'store'])
+    ->middleware(HandleApiErrors::class);
 });
 
 Route::post('/api/orders/{order}/send-receipt', [OrderController::class, 'sendReceipt'])->middleware('auth');
@@ -30,5 +33,5 @@ Route::get('api/merchant/items', [MerchantItemController::class, 'index']);
 Route::middleware(['auth'])->group(function () {
     Route::get('api/merchant/items', [MerchantItemController::class, 'index']);
 });
-Route::post('api/merchant/items', [ItemController::class, 'store']);
+
 Route::delete('api/merchant/items/{item}', [ItemController::class,'destroy']);

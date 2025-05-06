@@ -15,7 +15,8 @@ class Item extends Model
         'price',
         'stock',
         'image_url',
-        'merchant_id'
+        'merchant_id',
+        'is_active',
     ];
 
     public function categories()

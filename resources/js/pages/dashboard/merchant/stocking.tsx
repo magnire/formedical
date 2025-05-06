@@ -115,7 +115,18 @@ export default function MerchantStocking() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await axios.post('/api/items', formData); // Update endpoint
+            const formattedData = {
+                name: formData.name.trim(),
+                description: formData.description?.trim() || null,
+                price: parseFloat(formData.price) || 0,
+                stock: parseInt(formData.stock) || 0,
+                image_url: formData.image_url?.trim() || null,
+                categories: formData.categories.filter(Boolean),
+                merchant_id: auth.user.id
+            };
+    
+            const response = await axios.post('/api/merchant/items', formattedData);
+            console.log('Success:', response.data);
             alert('Item added successfully!');
             setFormData({
                 name: '',
@@ -125,11 +136,11 @@ export default function MerchantStocking() {
                 image_url: '',
                 categories: [],
             });
-            // Refresh items list after adding
             fetchItems();
-        } catch (error) {
-            console.error(error);
-            alert('Failed to add item.');
+        } catch (error: any) {
+            console.error('Error details:', error.response?.data);
+            const errorMessage = error.response?.data?.message || 'Failed to add item';
+            alert(errorMessage);
         }
     };
 
@@ -153,7 +164,7 @@ export default function MerchantStocking() {
         }
 
         try {
-            await axios.delete(`/api/items/${itemId}`); // Update endpoint
+            await axios.delete(`/api/merchant/items/${itemId}`); // Update endpoint
             setItems(items.filter(item => item.id !== itemId));
             alert('Item deleted successfully');
         } catch (error) {
