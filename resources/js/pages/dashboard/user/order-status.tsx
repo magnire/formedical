@@ -36,6 +36,11 @@ const breadcrumbs = [
     }
 ];
 
+const formatPrice = (price: string | number): string => {
+    const numericPrice = typeof price === 'string' ? Number(price) : price;
+    return numericPrice.toFixed(2);
+};
+
 export default function OrderStatus() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
@@ -161,7 +166,7 @@ export default function OrderStatus() {
                                                     <p>{item.item.name}</p>
                                                     <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
                                                 </div>
-                                                <p>${(item.price * item.quantity).toFixed(2)}</p>
+                                                <p>${formatPrice(item.price * item.quantity)}</p>
                                             </div>
                                         ))}
                                     </div>
@@ -177,7 +182,7 @@ export default function OrderStatus() {
                                         <div>
                                             <h3 className="font-medium mb-2">Payment Details</h3>
                                             <p>Method: {order.payment_method.toUpperCase()}</p>
-                                            <p className="font-semibold mt-2">Total: ${order.total.toFixed(2)}</p>
+                                            <p className="font-semibold mt-2">Total: ${formatPrice(order.total)}</p>
                                         </div>
                                     </div>
                                 </div>
