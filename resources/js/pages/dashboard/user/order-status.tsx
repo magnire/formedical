@@ -7,15 +7,15 @@ interface OrderItem {
     id: number;
     item: {
         name: string;
-        price: number;
+        price: number | string;
     };
     quantity: number;
-    price: number;
+    price: number | string;
 }
 
 interface Order {
     id: number;
-    total: number;
+    total: number | string;
     status: 'pending' | 'processing' | 'completed' | 'cancelled';
     created_at: string;
     items: OrderItem[];
@@ -166,7 +166,7 @@ export default function OrderStatus() {
                                                     <p>{item.item.name}</p>
                                                     <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
                                                 </div>
-                                                <p>${formatPrice(item.price * item.quantity)}</p>
+                                                <p>${formatPrice(Number(item.price) * item.quantity)}</p>
                                             </div>
                                         ))}
                                     </div>
