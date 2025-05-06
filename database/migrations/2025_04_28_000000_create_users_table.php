@@ -85,8 +85,11 @@ return new class extends Migration
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
-
-        // Drop dependent tables first
+    
+        // Drop dependent tables in correct order
+        if (Schema::hasTable('order_items')) {
+            Schema::dropIfExists('order_items');
+        }
         if (Schema::hasTable('merchant_applications')) {
             Schema::dropIfExists('merchant_applications');
         }
@@ -99,12 +102,12 @@ return new class extends Migration
         if (Schema::hasTable('items')) {
             Schema::dropIfExists('items');
         }
-
+    
         // Now drop the users table and related tables
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
-
+    
         Schema::enableForeignKeyConstraints();
     }
 };
