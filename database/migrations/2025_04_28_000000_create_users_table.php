@@ -85,13 +85,10 @@ return new class extends Migration
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
-    
+
         // Drop dependent tables in correct order
         if (Schema::hasTable('order_items')) {
             Schema::dropIfExists('order_items');
-        }
-        if (Schema::hasTable('merchant_applications')) {
-            Schema::dropIfExists('merchant_applications');
         }
         if (Schema::hasTable('orders')) {
             Schema::dropIfExists('orders');
@@ -99,11 +96,20 @@ return new class extends Migration
         if (Schema::hasTable('cart')) {
             Schema::dropIfExists('cart');
         }
+        if (Schema::hasTable('category_item')) {
+            Schema::dropIfExists('category_item');
+        }
+        if (Schema::hasTable('merchant_applications')) {
+            Schema::dropIfExists('merchant_applications');
+        }
         if (Schema::hasTable('items')) {
             Schema::dropIfExists('items');
         }
+        if (Schema::hasTable('categories')) {
+            Schema::dropIfExists('categories');
+        }
     
-        // Now drop the users table and related tables
+        // Finally drop user-related tables
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
