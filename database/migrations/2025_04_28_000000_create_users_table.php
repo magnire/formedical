@@ -11,51 +11,53 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->enum('role', ['user', 'merchant', 'admin'])->default('user')->nullable();
-            $table->string('first_name');
-            $table->string('last_name')->nullable();
+        if (!Schema::hasTable('users')) {
+            Schema::create('users', function (Blueprint $table) {
+                $table->id();
+                $table->enum('role', ['user', 'merchant', 'admin'])->default('user')->nullable();
+                $table->string('first_name');
+                $table->string('last_name')->nullable();
 
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            
-            $table->string('password');
+                $table->string('email')->unique();
+                $table->timestamp('email_verified_at')->nullable();
+                
+                $table->string('password');
 
-            $table->date('date_of_birth')->nullable();
-            $table->enum('gender', ['male', 'female'])->nullable();
+                $table->date('date_of_birth')->nullable();
+                $table->enum('gender', ['male', 'female'])->nullable();
 
-            $table->text('address')->nullable();
-            $table->text('property')->nullable();
+                $table->text('address')->nullable();
+                $table->text('property')->nullable();
 
-            $table->foreignId('country_id')->nullable();
-            $table->foreignId('state_id')->nullable();
-            $table->foreignId('city_id')->nullable();
+                $table->foreignId('country_id')->nullable();
+                $table->foreignId('state_id')->nullable();
+                $table->foreignId('city_id')->nullable();
 
-            $table->foreign('country_id')
-                ->references('id')
-                ->on('countries')
-                ->nullOnDelete();
-            
-            
-            $table->foreign('state_id')
-                ->references('id')
-                ->on('states')
-                ->nullOnDelete();
+                $table->foreign('country_id')
+                    ->references('id')
+                    ->on('countries')
+                    ->nullOnDelete();
+                
+                
+                $table->foreign('state_id')
+                    ->references('id')
+                    ->on('states')
+                    ->nullOnDelete();
 
-            $table->foreign('city_id')
-                ->references('id')
-                ->on('cities')
-                ->nullOnDelete();
+                $table->foreign('city_id')
+                    ->references('id')
+                    ->on('cities')
+                    ->nullOnDelete();
 
-            $table->string('zip_postal_code')->nullable();
-            $table->string('phone')->nullable();
+                $table->string('zip_postal_code')->nullable();
+                $table->string('phone')->nullable();
 
-            $table->string('active_mode')->nullable()->after('role');
+                $table->string('active_mode')->nullable()->after('role');
 
-            $table->rememberToken();
-            $table->timestamps();
-        });
+                $table->rememberToken();
+                $table->timestamps();
+            });
+        }
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
