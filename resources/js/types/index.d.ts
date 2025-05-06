@@ -60,7 +60,7 @@ export interface Item {
     id: number;
     name: string;
     description: string;
-    price: number;
+    price: number | string;
     stock: number;
     image_url: string;
     categories: { id: string; name: string }[];

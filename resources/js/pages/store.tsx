@@ -87,21 +87,16 @@ export default function Store({ items,
     }, []);
     
     useEffect(() => {
-        console.log('Items:', items);
-        console.log('Filtered Items:', filteredItems);
-    }, [items, filteredItems]);
-
-    useEffect(() => {
-        console.log('Items prop:', items);
-        console.log('Items type:', typeof items);
-        console.log('Is Array:', Array.isArray(items));
-        
         if (Array.isArray(items)) {
-            setFilteredItems(items);
+            const normalizedItems = items.map(item => ({
+                ...item,
+                price: typeof item.price === 'string' ? Number(item.price) : item.price
+            }));
+            setFilteredItems(normalizedItems);
             setIsLoading(false);
         }
     }, [items]);
-
+    
     useEffect(() => {
         if (Array.isArray(items)) {
             setFilteredItems(items.map(item => ({
@@ -252,7 +247,7 @@ export default function Store({ items,
                                                 <h3 className="text-lg font-bold">{item.name}</h3>
                                                 <p className="text-sm">{item.description}</p>
                                                 <p className="text-sm font-semibold">
-                                                    ${item.price.toFixed(2)}
+                                                    ${typeof item.price === 'string' ? Number(item.price).toFixed(2) : item.price.toFixed(2)}
                                                 </p>
                                                 <p className="text-sm">Stock: {item.stock}</p>
                                             </div>

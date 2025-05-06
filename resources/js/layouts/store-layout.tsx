@@ -19,6 +19,11 @@ export default function StoreLayout({
     onCategoryChange,
     onSearch
 }: StoreLayoutProps) {
+    const normalizedItems = items?.map(item => ({
+        ...item,
+        price: typeof item.price === 'string' ? Number(item.price) : item.price
+    })) || [];
+
     return (
         <StoreLayoutTemplate 
             breadcrumbs={breadcrumbs} 

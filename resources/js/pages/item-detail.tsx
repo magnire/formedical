@@ -145,7 +145,9 @@ export default function ItemDetail({ item }: ItemDetailProps) {
                         </div>
                         <div className="space-y-4">
                             <h1 className="text-3xl font-bold">{item.name}</h1>
-                            <p className="text-xl font-semibold">${item.price.toFixed(2)}</p>
+                            <p className="text-xl font-semibold">
+                                ${typeof item.price === 'string' ? Number(item.price).toFixed(2) : item.price.toFixed(2)}
+                            </p>
                             <p className="text-gray-600">{item.description}</p>
                             <p className="text-sm">Stock: {item.stock}</p>
                             <div className="flex flex-wrap gap-2">

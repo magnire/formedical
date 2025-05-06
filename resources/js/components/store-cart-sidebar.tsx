@@ -17,6 +17,11 @@ interface CartSidebarProps {
 export default function StoreCartSidebar({ isOpen, onClose, onCartUpdate }: CartSidebarProps) {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
+    const formatPrice = (price: string | number): string => {
+        const numericPrice = typeof price === 'string' ? Number(price) : price;
+        return numericPrice.toFixed(2);
+    };
+
     const handleQuantityChange = (itemId: number, quantity: number) => {
         if (quantity < 0) return;
     
@@ -143,9 +148,8 @@ export default function StoreCartSidebar({ isOpen, onClose, onCartUpdate }: Cart
                                 {cartItems.map((item) => (
                                     <li key={item.id} className="flex flex-col mb-4 p-2 border-b">
                                         <div className="flex justify-between items-start mb-2">
-                                            <div>
-                                                <p className="font-medium">{item.name}</p>
-                                                <p className="text-sm text-gray-600">${item.price.toFixed(2)}</p>
+                                            <div className="text-sm font-medium">
+                                                ${formatPrice(item.price)}
                                             </div>
                                             <button
                                                 onClick={() => handleRemoveItem(item.id)}
