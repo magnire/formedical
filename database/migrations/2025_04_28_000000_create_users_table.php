@@ -85,7 +85,22 @@ return new class extends Migration
     public function down(): void
     {
         Schema::disableForeignKeyConstraints();
-        
+
+        // Drop dependent tables first
+        if (Schema::hasTable('merchant_applications')) {
+            Schema::dropIfExists('merchant_applications');
+        }
+        if (Schema::hasTable('orders')) {
+            Schema::dropIfExists('orders');
+        }
+        if (Schema::hasTable('cart')) {
+            Schema::dropIfExists('cart');
+        }
+        if (Schema::hasTable('items')) {
+            Schema::dropIfExists('items');
+        }
+
+        // Now drop the users table and related tables
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
