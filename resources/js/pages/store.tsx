@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import StoreLayout from '@/layouts/store-layout';
-import { type BreadcrumbItem } from '@/types';
+import { type BreadcrumbItem, type Item } from '@/types';
 import { Head } from '@inertiajs/react';
 import { StoreSidebar } from '@/components/store-sidebar';
 import { Link } from '@inertiajs/react';
@@ -12,15 +12,15 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface Item {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    stock: number;
-    image_url: string;
-    categories: { id: string; name: string }[];
-}
+// interface Item {
+//     id: number;
+//     name: string;
+//     description: string;
+//     price: string | number;
+//     stock: number;
+//     image_url: string;
+//     categories: { id: string; name: string }[];
+// }
 interface CartItem {
     id: number;  // Changed from item_id to id
     name: string;
@@ -101,7 +101,17 @@ export default function Store({ items,
             setIsLoading(false);
         }
     }, [items]);
-    
+
+    useEffect(() => {
+        if (Array.isArray(items)) {
+            setFilteredItems(items.map(item => ({
+                ...item,
+                price: Number(item.price)
+            })));
+            setIsLoading(false);
+        }
+    }, [items]);
+
     useEffect(() => {
         // Only fetch cart data since items are now managed by the layout
         fetch('/api/cart')
